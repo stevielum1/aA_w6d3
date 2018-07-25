@@ -1,4 +1,5 @@
 const APIUtil = require("./api_util.js");
+const FollowToggle = require("./follow_toggle.js");
 
 function UsersSearch(el) {
   this.$el = el;
@@ -16,7 +17,14 @@ UsersSearch.prototype.handleInput = function() {
 UsersSearch.prototype.renderResults = function(users){
   this.$ul.find('li').remove();
   for (let i = 0; i < users.length; i++) {
-    const li = $(`<li><a>${users[i].username}</a></li>`);
+    const options = {
+      userId: users[i].id,
+      followState: users[i].followed ? "followed" : "unfollowed" 
+    };
+    const li = $(`<li><a href="/users/${users[i].id}">${users[i].username}</a></li>`);
+    const button = $(`<button class="follow-toggle"></button>`);
+    new FollowToggle(button, options);
+    li.append(button);
     this.$ul.append(li);
   }
 };
